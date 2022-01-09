@@ -19,11 +19,11 @@ public class MigrationGenerator {
 
     private final List<Class<?>> classes = new ArrayList<>();
 
-    public MigrationGenerator(String dataSourceName, Path path, Platform... platforms) {
+    public MigrationGenerator(String dataSourceName, Path resourcePath, Platform... platforms) {
         this.dataSourceName = dataSourceName;
 
         this.dbMigration = DbMigration.create();
-        this.dbMigration.setPathToResources(path.toString());
+        this.dbMigration.setPathToResources(resourcePath.toString());
         this.dbMigration.setMigrationPath("migrations");
 
         for ( Platform platform : platforms ) {
