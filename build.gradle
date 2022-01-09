@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+}
+
+group 'com.gufli.brickdatabase'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.spongepowered.org/maven' }
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+
+    compileOnly 'com.github.Minestom:Minestom:1.18-SNAPSHOT'
+
+    compileOnly 'io.ebean:ebean:12.14.0'
+    compileOnly 'io.ebean:ebean-ddl-generator:12.14.0'
+    compileOnly 'io.ebean:ebean-querybean:12.14.0'
+    annotationProcessor 'io.ebean:querybean-generator:12.14.0'
+
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+
+    // TESTING
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.8.2')
+
+    testImplementation 'com.github.Minestom:Minestom:1.18-SNAPSHOT'
+    testImplementation 'io.ebean:ebean:12.14.0'
+    testImplementation 'io.ebean:ebean-ddl-generator:12.14.0'
+    testImplementation 'io.ebean:ebean-querybean:12.14.0'
+
+    testRuntimeOnly 'com.h2database:h2:2.0.204'
+}
+
+test {
+    useJUnitPlatform()
+}
