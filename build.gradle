@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'java-library'
     id 'maven-publish'
+    id('io.ebean') version '12.14.0'
 }
 
 group 'com.gufli.brickdatabase'
@@ -37,4 +38,16 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'com.github.MinestomBrick'
+            artifactId = 'BrickDatabase'
+            version = '1.0.0'
+
+            from components.java
+        }
+    }
 }
