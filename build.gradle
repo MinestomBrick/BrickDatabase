@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    apply plugin: 'maven-publish'
 }
 
 group 'com.gufli.brickutils'
@@ -18,8 +17,8 @@ allprojects {
     sourceCompatibility = 1.17
     targetCompatibility = 1.17
 
-    group = parent.group;
-    version = parent.version;
+    group = this.group;
+    version = this.version;
 
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
@@ -32,15 +31,3 @@ allprojects {
         maven { url 'https://repo.spongepowered.org/maven' }
     }
 }
-
-//publishing {
-//    publications {
-//        mavenJava(MavenPublication) {
-////            groupId = 'com.github.MinestomBrick'
-////            artifactId = 'BrickDatabase'
-////            version = '1.0.0'
-//
-//            from components.java
-//        }
-//    }
-//}

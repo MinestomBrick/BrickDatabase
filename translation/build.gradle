@@ -10,7 +10,7 @@ afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
-                from components.release
+                from components.java
 
                 groupId = rootProject.group
                 artifactId = 'translation'

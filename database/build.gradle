@@ -30,16 +30,14 @@ test {
     useJUnitPlatform()
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
+publishing {
+    publications {
+        release(MavenPublication) {
+            from components.java
 
-                groupId = rootProject.group
-                artifactId = 'database'
-                version = rootProject.version
-            }
+            groupId = rootProject.group
+            artifactId = 'database'
+            version = rootProject.version
         }
     }
 }
