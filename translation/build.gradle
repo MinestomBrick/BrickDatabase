@@ -12,9 +12,9 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
 
-                groupId = 'com.gufli.brickutils'
+                groupId = rootProject.group
                 artifactId = 'translation'
-                version = '0.1.4'
+                version = rootProject.version
             }
         }
     }
