@@ -25,7 +25,7 @@ public class TranslationManager {
     private final TranslationRegistry registry;
 
     public TranslationManager(Extension extension) {
-        final Key key = Key.key(extension.getOrigin().getName() + ":translations");
+        final Key key = Key.key(extension.getOrigin().getName().toLowerCase() + ":translations");
         this.registry = TranslationRegistry.create(key);
     }
 
