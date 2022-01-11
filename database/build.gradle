@@ -1,12 +1,14 @@
 plugins {
     id 'java'
+    id 'java-library'
+    id('io.ebean') version '12.14.0'
 }
 
 group 'com.gufli.brickutils.database'
 
 dependencies {
 
-    compileOnly 'com.github.Minestom:Minestom:1.18-SNAPSHOT'
+    compileOnly 'com.github.Minestom:Minestom:-SNAPSHOT'
 
     compileOnly 'io.ebean:ebean:12.14.0'
     compileOnly 'io.ebean:ebean-ddl-generator:12.14.0'
@@ -15,7 +17,7 @@ dependencies {
     // TESTING
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testImplementation 'com.github.Minestom:Minestom:1.18-SNAPSHOT'
+    testImplementation 'com.github.Minestom:Minestom:-SNAPSHOT'
 
     testImplementation 'io.ebean:ebean:12.14.0'
     testImplementation 'io.ebean:ebean-ddl-generator:12.14.0'
