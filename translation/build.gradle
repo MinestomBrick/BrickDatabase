@@ -5,3 +5,17 @@ plugins {
 dependencies {
     compileOnly 'com.github.Minestom:Minestom:-SNAPSHOT'
 }
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = 'com.gufli.brickutils'
+                artifactId = 'translation'
+                version = '0.1.4'
+            }
+        }
+    }
+}

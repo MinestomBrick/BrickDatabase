@@ -4,8 +4,6 @@ plugins {
     id('io.ebean') version '12.14.0'
 }
 
-group 'com.gufli.brickutils.database'
-
 dependencies {
 
     compileOnly 'com.github.Minestom:Minestom:-SNAPSHOT'
@@ -30,4 +28,18 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = 'com.gufli.brickutils'
+                artifactId = 'database'
+                version = '0.1.4'
+            }
+        }
+    }
 }
