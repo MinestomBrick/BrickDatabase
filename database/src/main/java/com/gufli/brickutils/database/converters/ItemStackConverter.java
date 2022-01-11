@@ -1,4 +1,4 @@
-package com.gufli.brickdatabase.converters;
+package com.gufli.brickutils.database.converters;
 
 import net.minestom.server.item.ItemStack;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;

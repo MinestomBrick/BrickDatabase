@@ -1,10 +1,11 @@
 package com.gufli.brickdatabase;
 
-import com.gufli.brickdatabase.converters.ColorConverter;
-import com.gufli.brickdatabase.converters.ItemStackConverter;
-import com.gufli.brickdatabase.converters.NBTCompoundConverter;
-import com.gufli.brickdatabase.converters.PosConverter;
-import com.gufli.brickdatabase.migration.MigrationGenerator;
+import com.gufli.brickutils.database.DatabaseContext;
+import com.gufli.brickutils.database.converters.ColorConverter;
+import com.gufli.brickutils.database.converters.ItemStackConverter;
+import com.gufli.brickutils.database.converters.NBTCompoundConverter;
+import com.gufli.brickutils.database.converters.PosConverter;
+import com.gufli.brickutils.database.migration.MigrationGenerator;
 import io.ebean.annotation.Platform;
 import io.ebean.config.DatabaseConfig;
 import org.junit.jupiter.api.*;

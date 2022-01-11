@@ -1,2 +1,5 @@
-rootProject.name = 'BrickDatabase'
+rootProject.name = 'BrickUtils'
+
+include 'database'
+include 'translation'
 

@@ -5,47 +5,42 @@ plugins {
     id('io.ebean') version '12.14.0'
 }
 
-group 'com.gufli.brickdatabase'
+group 'com.gufli.brickutils'
 version '1.0-SNAPSHOT'
 
-repositories {
-    mavenCentral()
-    maven { url 'https://repo.spongepowered.org/maven' }
-    maven { url 'https://jitpack.io' }
+compileJava {
+    sourceCompatibility = 1.17
+    targetCompatibility = 1.17
 }
 
-dependencies {
+subprojects {
+    apply plugin: 'java'
 
-    compileOnly 'com.github.Minestom:Minestom:1.18-SNAPSHOT'
+    sourceCompatibility = 1.17
+    targetCompatibility = 1.17
 
-    compileOnly 'io.ebean:ebean:12.14.0'
-    compileOnly 'io.ebean:ebean-ddl-generator:12.14.0'
-    compileOnly 'io.ebean:ebean-querybean:12.14.0'
+    group = parent.group;
+    version = parent.version;
 
-    // TESTING
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testImplementation 'com.github.Minestom:Minestom:1.18-SNAPSHOT'
+    repositories {
+        mavenCentral()
 
-    testImplementation 'io.ebean:ebean:12.14.0'
-    testImplementation 'io.ebean:ebean-ddl-generator:12.14.0'
-    testImplementation 'io.ebean:ebean-querybean:12.14.0'
-
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
-    testRuntimeOnly 'com.h2database:h2:2.0.204'
-    testRuntimeOnly 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://repo.spongepowered.org/maven' }
+    }
 }
 
-test {
-    useJUnitPlatform()
-}
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            groupId = 'com.github.MinestomBrick'
-            artifactId = 'BrickDatabase'
-            version = '1.0.0'
+//            groupId = 'com.github.MinestomBrick'
+//            artifactId = 'BrickDatabase'
+//            version = '1.0.0'
 
             from components.java
         }

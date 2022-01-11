@@ -1,4 +1,4 @@
-package com.gufli.brickdatabase.migration;
+package com.gufli.brickutils.database.migration;
 
 import io.ebean.Database;
 import io.ebean.DatabaseFactory;

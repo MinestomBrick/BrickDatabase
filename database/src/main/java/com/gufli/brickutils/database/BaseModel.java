@@ -1,4 +1,4 @@
-package com.gufli.brickdatabase;
+package com.gufli.brickutils.database;
 
 public interface BaseModel {
 

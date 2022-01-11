@@ -1,4 +1,4 @@
-package com.gufli.brickdatabase.converters;
+package com.gufli.brickutils.database.converters;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

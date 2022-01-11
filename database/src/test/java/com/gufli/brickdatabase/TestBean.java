@@ -1,9 +1,10 @@
 package com.gufli.brickdatabase;
 
-import com.gufli.brickdatabase.converters.ColorConverter;
-import com.gufli.brickdatabase.converters.ItemStackConverter;
-import com.gufli.brickdatabase.converters.NBTCompoundConverter;
-import com.gufli.brickdatabase.converters.PosConverter;
+import com.gufli.brickutils.database.BaseModel;
+import com.gufli.brickutils.database.converters.ColorConverter;
+import com.gufli.brickutils.database.converters.ItemStackConverter;
+import com.gufli.brickutils.database.converters.NBTCompoundConverter;
+import com.gufli.brickutils.database.converters.PosConverter;
 import io.ebean.Model;
 import io.ebean.annotation.DbName;
 import net.minestom.server.color.Color;

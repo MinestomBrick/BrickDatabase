@@ -1,4 +1,4 @@
-package com.gufli.brickdatabase;
+package com.gufli.brickutils.database;
 
 import io.ebean.DB;
 import io.ebean.DatabaseFactory;
@@ -10,8 +10,6 @@ import io.ebean.datasource.DataSourcePool;
 import io.ebean.migration.MigrationConfig;
 import io.ebean.migration.MigrationRunner;
 
-import javax.sql.DataSource;
-import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;

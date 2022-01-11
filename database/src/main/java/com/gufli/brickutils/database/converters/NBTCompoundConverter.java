@@ -1,4 +1,4 @@
-package com.gufli.brickdatabase.converters;
+package com.gufli.brickutils.database.converters;
 
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
