@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    compileOnly project(':translation')
+    compileOnly 'com.github.Minestom:Minestom:-SNAPSHOT'
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.java
+
+                groupId = rootProject.group
+                artifactId = 'commands'
+                version = rootProject.version
+            }
+        }
+    }
+}
