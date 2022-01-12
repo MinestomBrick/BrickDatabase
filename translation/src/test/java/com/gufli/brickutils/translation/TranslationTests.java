@@ -13,7 +13,7 @@ public class TranslationTests {
 
     @Test
     public void translationManagerTest() {
-        TranslationManager tm = new TranslationManager("Test", Locale.ENGLISH);
+        SimpleTranslationManager tm = new SimpleTranslationManager("Test", Locale.ENGLISH);
         tm.loadTranslation(getClass().getClassLoader().getResource("languages/en.json"));
 
         Component translated = GlobalTranslator.render(Component.translatable("test.message")
