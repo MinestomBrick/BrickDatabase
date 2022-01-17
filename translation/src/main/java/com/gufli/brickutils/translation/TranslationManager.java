@@ -15,7 +15,7 @@ public interface TranslationManager {
 
     Component translate(Localizable localizable, String key);
 
-    Component translate(Localizable localizable, String key, String... args);
+    Component translate(Localizable localizable, String key, Object... args);
 
     Component translate(Localizable localizable, String key, Component... args);
 

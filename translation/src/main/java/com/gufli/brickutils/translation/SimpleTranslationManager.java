@@ -70,10 +70,10 @@ public class SimpleTranslationManager implements TranslationManager {
     }
 
     @Override
-    public Component translate(Localizable localizable, String key, String... args) {
+    public Component translate(Localizable localizable, String key, Object... args) {
         Component[] cargs = new Component[args.length];
         for ( int i = 0 ; i < args.length; i++ ) {
-            cargs[i] = Component.text(args[i]);
+            cargs[i] = Component.text(args[i].toString());
         }
         return translate(localizable, Component.translatable(key).args(cargs));
     }
