@@ -29,15 +29,3 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-
-publishing {
-    publications {
-        release(MavenPublication) {
-            from components.java
-
-            groupId = rootProject.group
-            artifactId = 'database'
-            version = rootProject.version
-        }
-    }
-}

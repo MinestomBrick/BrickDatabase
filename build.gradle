@@ -39,5 +39,14 @@ allprojects {
                 credentials(org.gradle.api.credentials.PasswordCredentials)
             }
         }
+
+        publications {
+            release(MavenPublication) {
+                from components.java
+                groupId = rootProject.group
+                artifactId = project.name
+                version = rootProject.version
+            }
+        }
     }
 }

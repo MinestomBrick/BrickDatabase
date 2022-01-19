@@ -15,17 +15,3 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.java
-
-                groupId = rootProject.group
-                artifactId = 'translation'
-                version = rootProject.version
-            }
-        }
-    }
-}
