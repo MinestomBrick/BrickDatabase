@@ -1,4 +1,4 @@
-name: Test, build and upload artifact
+name: Test and publish
 
 on:
   push:
@@ -34,4 +34,5 @@ jobs:
         with:
           arguments: publish
         env:
-          GITHUB_ACTOR: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
