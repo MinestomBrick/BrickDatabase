@@ -2,44 +2,44 @@ package com.gufli.brickutils.commands;
 
 import com.gufli.brickutils.translation.TranslationManager;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.command.ConsoleSender;
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandExecutor;
+import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
-import net.minestom.server.entity.Player;
-import net.minestom.server.permission.Permission;
 import net.minestom.server.utils.callback.CommandCallback;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.function.Consumer;
 
 public class BrickCommand extends Command {
 
-    private final List<CommandCondition> conditions = new ArrayList<>();
-
     public BrickCommand(@NotNull String name, @Nullable String... aliases) {
         super(name, aliases);
-        setupDefaultConditions();
+        setupDefaultCondition();
     }
 
     public BrickCommand(@NotNull String name) {
         super(name);
-        setupDefaultConditions();
+        setupDefaultCondition();
     }
 
-    private void setupDefaultConditions() {
-        setCondition((sender, commandString) -> conditions.stream()
-                .allMatch(cc -> cc.canUse(sender, commandString)));
+    private void setupDefaultCondition() {
+        setCondition(groupSyntaxConditions());
     }
 
     // COMMAND GROUP
 
     protected void setupCommandGroupDefaults() {
         // default condition check
-        addCondition((sender, commandString) -> getSubcommands().stream().anyMatch(sub -> sub.getCondition() == null
-                || sub.getCondition().canUse(sender, commandString)));
+        setCondition((sender, commandString) ->
+                getSubcommands().stream()
+                        .map(Command::getCondition)
+                        .filter(Objects::nonNull)
+                        .anyMatch(cc -> cc.canUse(sender, commandString)));
 
         // sub command not found
         setDefaultExecutor((sender, context) -> {
@@ -48,76 +48,50 @@ public class BrickCommand extends Command {
         });
     }
 
-    // CREATE CONDITIONS
+    // CONDITIONS
 
-    protected CommandCondition createPermissionCondition(String permission, String errorMsgKey) {
-        return createPermissionCondition(new Permission(permission), errorMsgKey);
+    protected void setCondition(@NotNull Consumer<CommandConditionBuilder> consumer) {
+        CommandConditionBuilder builder = conditionBuilder();
+        consumer.accept(builder);
+        setCondition(builder.build());
     }
 
-    protected CommandCondition createPermissionCondition(Permission permission, String errorMsgKey) {
-        return createCondition((sender, commandString) -> sender instanceof ConsoleSender   // console can do it all
-                        || sender.hasPermission(permission)                                 // or you have specific permission
-                        || (sender instanceof Player p && p.getPermissionLevel() == 4),     // or you have permission level 4 (operator)
-                errorMsgKey);
+    protected @NotNull CommandConditionBuilder conditionBuilder() {
+        return new CommandConditionBuilder();
     }
 
-    protected CommandCondition createPlayerOnlyCondition(String errorMsgKey) {
-        return createCondition((sender, commandString) -> sender instanceof Player, errorMsgKey);
+    protected @NotNull CommandCondition conditionAny(@NotNull Collection<CommandCondition> conditions) {
+        CommandConditionBuilder builder = conditionBuilder().or();
+        conditions.forEach(builder::with);
+        return builder.end().build();
     }
 
-    protected CommandCondition createConsoleOnlyCondition(String errorMsgKey) {
-        return createCondition((sender, commandString) -> sender instanceof ConsoleSender, errorMsgKey);
+    protected @NotNull CommandCondition groupSyntaxConditions() {
+        return (sender, commandString) -> getSyntaxes().stream()
+                .map(CommandSyntax::getCommandCondition)
+                .filter(Objects::nonNull)
+                .anyMatch(cc -> cc.canUse(sender, null));
     }
 
-    protected CommandCondition createCondition(CommandCondition condition, String errorMsgKey) {
-        return (sender, commandString) -> {
-            if (!condition.canUse(sender, commandString)) {
-                TranslationManager.get().send(sender, errorMsgKey);
-                return false;
-            }
-            return true;
-        };
-    }
-
-    // ADD CONDITION
-
-    protected void addCondition(CommandCondition condition) {
-        conditions.add(condition);
-    }
-
-    protected void addCondition(CommandCondition condition, String errorMsgKey) {
-        conditions.add(createCondition(condition, errorMsgKey));
-    }
-
-    protected void addPermissionCondition(String permission, String errorMsgKey) {
-        conditions.add(createPermissionCondition(permission, errorMsgKey));
-    }
-
-    protected void addPermissionCondition(Permission permission, String errorMsgKey) {
-        conditions.add(createPermissionCondition(permission, errorMsgKey));
-    }
-
-    protected void addPlayerOnlyCondition(String errorMsgKey) {
-        conditions.add(createPlayerOnlyCondition(errorMsgKey));
-    }
-
-    protected void addConsoleOnlyCondition(String errorMsgKey) {
-        conditions.add(createConsoleOnlyCondition(errorMsgKey));
+    public @NotNull Collection<CommandSyntax> addConditionalSyntax(Consumer<CommandConditionBuilder> consumer, @NotNull CommandExecutor executor, @NotNull Argument<?>... args) {
+        CommandConditionBuilder builder = conditionBuilder();
+        consumer.accept(builder);
+        return super.addConditionalSyntax(builder.build(), executor, args);
     }
 
     // INVALID MESSAGES
 
-    protected void setInvalidUsageMessage(String key) {
+    protected void setInvalidUsageMessage(@NotNull String key) {
         setDefaultExecutor((sender, context) ->
                 TranslationManager.get().send(sender, key));
     }
 
-    protected void setInvalidArgumentMessage(Argument<?> argument) {
+    protected void setInvalidArgumentMessage(@NotNull Argument<?> argument) {
         setArgumentCallback((sender, exception) ->
                 TranslationManager.get().send(sender, "cmd.error.args", argument.getId(), exception.getInput()), argument);
     }
 
-    protected void setInvalidArgumentMessage(Argument<?> argument, String key) {
+    protected void setInvalidArgumentMessage(@NotNull Argument<?> argument, @NotNull String key) {
         setArgumentCallback((sender, exception) ->
                 TranslationManager.get().send(sender, key, exception.getInput()), argument);
     }

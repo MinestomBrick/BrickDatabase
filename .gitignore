@@ -4,6 +4,7 @@
 
 # Gradle
 .gradle/
+../BrickEssentials/gradle.properties
 
 # Build output
 build/
