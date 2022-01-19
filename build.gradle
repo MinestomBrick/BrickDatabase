@@ -34,12 +34,9 @@ allprojects {
     publishing {
         repositories {
             maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/MinestomBrick/BrickUtils")
-                credentials {
-                    username = System.getenv("GITHUB_ACTOR")
-                    password = System.getenv("GITHUB_TOKEN")
-                }
+                name = "Jorisg"
+                url = uri("https://repo.jorisg.com/snapshots")
+                credentials(org.gradle.api.credentials.PasswordCredentials)
             }
         }
     }
