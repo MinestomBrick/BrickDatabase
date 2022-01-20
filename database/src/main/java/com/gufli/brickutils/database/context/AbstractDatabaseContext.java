@@ -1,5 +1,7 @@
-package com.gufli.brickutils.database;
+package com.gufli.brickutils.database.context;
 
+import com.google.gson.JsonObject;
+import com.gufli.brickutils.database.BaseModel;
 import io.ebean.DB;
 import io.ebean.DatabaseFactory;
 import io.ebean.Transaction;
@@ -14,15 +16,31 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 
-public abstract class DatabaseContext {
+public abstract class AbstractDatabaseContext implements DatabaseContext {
 
     private final String dataSourceName;
     private DataSourcePool pool;
 
-    public DatabaseContext(String dataSourceName) {
+    public AbstractDatabaseContext(String dataSourceName) {
         this.dataSourceName = dataSourceName;
+    }
+
+    public final <T> T withContextClassLoader(Callable<T> callable) throws Exception {
+        ClassLoader originalContextClassLoader = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
+
+        try {
+            return callable.call();
+        } finally {
+            Thread.currentThread().setContextClassLoader(originalContextClassLoader);
+        }
+    }
+
+    public final void init(JsonObject config) throws SQLException {
+        init(config.get("dsn").getAsString(), config.get("username").getAsString(), config.get("password").getAsString());
     }
 
     public final void init(String dsn, String username, String password) throws SQLException {
@@ -34,13 +52,7 @@ public abstract class DatabaseContext {
             throw new IllegalStateException("This context has already been initialized.");
         }
 
-        // changing class loader is required or Ebean can't find the required libraries
-        ClassLoader originalContextClassLoader = Thread.currentThread().getContextClassLoader();
-        Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
-
         initInternal(dsn, username, password, migrationsPath);
-
-        Thread.currentThread().setContextClassLoader(originalContextClassLoader);
     }
 
     private void initInternal(String dsn, String username, String password, String migrationsPath) throws SQLException {
@@ -97,8 +109,8 @@ public abstract class DatabaseContext {
         }
     }
 
-    public DataSourcePool dataSourcePool() {
-        return pool;
+    public Connection getConnection() throws SQLException {
+        return pool.getConnection();
     }
 
     /**
