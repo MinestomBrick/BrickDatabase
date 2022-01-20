@@ -10,7 +10,7 @@ compileJava {
     targetCompatibility = 1.17
 }
 
-allprojects {
+subprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
 
