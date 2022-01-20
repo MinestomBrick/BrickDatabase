@@ -73,7 +73,7 @@ public class SimpleTranslationManager implements TranslationManager {
     public Component translate(Localizable localizable, String key, Object... args) {
         Component[] cargs = new Component[args.length];
         for ( int i = 0 ; i < args.length; i++ ) {
-            cargs[i] = Component.text(args[i].toString());
+            cargs[i] = args[i] instanceof Component ca ? ca : Component.text(args[i].toString());
         }
         return translate(localizable, Component.translatable(key).args(cargs));
     }
@@ -98,10 +98,10 @@ public class SimpleTranslationManager implements TranslationManager {
     }
 
     @Override
-    public void send(CommandSender sender, String key, String... args) {
+    public void send(CommandSender sender, String key, Object... args) {
         Component[] cargs = new Component[args.length];
         for ( int i = 0 ; i < args.length; i++ ) {
-            cargs[i] = Component.text(args[i]);
+            cargs[i] = args[i] instanceof Component ca ? ca : Component.text(args[i].toString());
         }
         send(sender, Component.translatable(key).args(cargs));
     }

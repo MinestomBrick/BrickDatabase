@@ -23,7 +23,7 @@ public interface TranslationManager {
 
     void send(CommandSender sender, String key);
 
-    void send(CommandSender sender, String key, String... args);
+    void send(CommandSender sender, String key, Object... args);
 
     void send(CommandSender sender, String key, Component... args);
 
