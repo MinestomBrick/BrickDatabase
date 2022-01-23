@@ -2,8 +2,14 @@ plugins {
     id 'java'
 }
 
+repositories {
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
+
 dependencies {
     compileOnly 'com.github.Minestom:Minestom:-SNAPSHOT'
+
+    implementation "net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT"
 
     // TEST
 

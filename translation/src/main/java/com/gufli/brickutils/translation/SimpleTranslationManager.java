@@ -5,12 +5,9 @@ import com.google.gson.JsonParser;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
 import net.minestom.server.adventure.Localizable;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.ConsoleSender;
 import net.minestom.server.entity.Player;
 import net.minestom.server.extensions.Extension;
 import org.slf4j.Logger;
@@ -40,15 +37,18 @@ public class SimpleTranslationManager implements TranslationManager {
     private final TranslationRegistry registry;
     private final Locale defaultLocale;
 
+    // custom renderer based on minimesage to support stuff like colors
+    private final BrickComponentRenderer renderer;
+
     public SimpleTranslationManager(String namespace, Locale defaultLocale) {
         INSTANCE = this;
 
         final Key key = Key.key(namespace.toLowerCase() + ":translations");
         this.registry = TranslationRegistry.create(key);
+        this.renderer = BrickComponentRenderer.usingTranslationSource(registry);
         this.defaultLocale = defaultLocale;
 
         this.registry.defaultLocale(defaultLocale);
-        GlobalTranslator.get().addSource(registry);
     }
 
     public SimpleTranslationManager(Extension extension, Locale defaulLocale) {
@@ -57,11 +57,15 @@ public class SimpleTranslationManager implements TranslationManager {
 
     // api
 
+    private Component translate(Locale locale, TranslatableComponent component) {
+        return renderer.render(component, locale);
+    }
+
     @Override
     public Component translate(Localizable localizable, TranslatableComponent component) {
         Locale locale = localizable.getLocale();
-        if ( locale == null ) locale = defaultLocale;
-        return GlobalTranslator.render(component, locale);
+        if (locale == null) locale = defaultLocale;
+        return translate(locale, component);
     }
 
     @Override
@@ -72,7 +76,7 @@ public class SimpleTranslationManager implements TranslationManager {
     @Override
     public Component translate(Localizable localizable, String key, Object... args) {
         Component[] cargs = new Component[args.length];
-        for ( int i = 0 ; i < args.length; i++ ) {
+        for (int i = 0; i < args.length; i++) {
             cargs[i] = args[i] instanceof Component ca ? ca : Component.text(args[i].toString());
         }
         return translate(localizable, Component.translatable(key).args(cargs));
@@ -85,11 +89,11 @@ public class SimpleTranslationManager implements TranslationManager {
 
     @Override
     public void send(CommandSender sender, TranslatableComponent component) {
-        if ( sender instanceof Player p ) {
+        if (sender instanceof Player p) {
             sender.sendMessage(translate(p, component));
             return;
         }
-        sender.sendMessage(GlobalTranslator.render(component, defaultLocale));
+        sender.sendMessage(translate(defaultLocale, component));
     }
 
     @Override
@@ -100,7 +104,7 @@ public class SimpleTranslationManager implements TranslationManager {
     @Override
     public void send(CommandSender sender, String key, Object... args) {
         Component[] cargs = new Component[args.length];
-        for ( int i = 0 ; i < args.length; i++ ) {
+        for (int i = 0; i < args.length; i++) {
             cargs[i] = args[i] instanceof Component ca ? ca : Component.text(args[i].toString());
         }
         send(sender, Component.translatable(key).args(cargs));
@@ -131,7 +135,7 @@ public class SimpleTranslationManager implements TranslationManager {
             Stream<Path> pathStream = Files.walk(fs.getPath(pathToResources));
             for (Iterator<Path> it = pathStream.iterator(); it.hasNext(); ) {
                 Path path = it.next();
-                if ( !path.getFileName().toString().contains(".") ) {
+                if (!path.getFileName().toString().contains(".")) {
                     continue;
                 }
 
@@ -143,11 +147,11 @@ public class SimpleTranslationManager implements TranslationManager {
         }
 
         // load files from data directory (highest priority)
-        for ( Path path : paths ) {
+        for (Path path : paths) {
             Path target = Path.of(pathToResources, path.getFileName().toString()); // change path provider
             Path targetFile = extension.getDataDirectory().resolve(target);
             try {
-                if ( !Files.exists(targetFile) && !extension.savePackagedResource(targetFile)) {
+                if (!Files.exists(targetFile) && !extension.savePackagedResource(targetFile)) {
                     LOGGER.warn("Cannot save packaged resource '" + target + "' of extension '" + extension.getOrigin().getName() + "'.");
                     continue;
                 }
@@ -182,7 +186,7 @@ public class SimpleTranslationManager implements TranslationManager {
     private void load(InputStream inputStream, Locale locale) throws IOException {
         try (
                 inputStream;
-                InputStreamReader isr = new InputStreamReader(inputStream);
+                InputStreamReader isr = new InputStreamReader(inputStream)
         ) {
             JsonObject config = JsonParser.parseReader(isr).getAsJsonObject();
             registry.registerAll(locale, config.keySet(), key -> new MessageFormat(config.get(key).getAsString()));
