@@ -57,7 +57,8 @@ public class SimpleTranslationManager implements TranslationManager {
 
     // api
 
-    private Component translate(Locale locale, TranslatableComponent component) {
+    @Override
+    public Component translate(Locale locale, TranslatableComponent component) {
         return renderer.render(component, locale);
     }
 

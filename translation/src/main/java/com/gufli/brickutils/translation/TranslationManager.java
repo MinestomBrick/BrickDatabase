@@ -5,11 +5,15 @@ import net.kyori.adventure.text.TranslatableComponent;
 import net.minestom.server.adventure.Localizable;
 import net.minestom.server.command.CommandSender;
 
+import java.util.Locale;
+
 public interface TranslationManager {
 
     static TranslationManager get() {
         return SimpleTranslationManager.INSTANCE;
     }
+
+    Component translate(Locale locale, TranslatableComponent component);
 
     Component translate(Localizable localizable, TranslatableComponent component);
 

@@ -16,8 +16,8 @@ public class TranslationTests {
         SimpleTranslationManager tm = new SimpleTranslationManager("Test", Locale.ENGLISH);
         tm.loadTranslation(getClass().getClassLoader().getResource("languages/en.json"));
 
-        Component translated = GlobalTranslator.render(Component.translatable("test.message")
-                .args(Component.text("there")), Locale.ENGLISH);
+        Component translated = tm.translate(Locale.ENGLISH, Component.translatable("test.message")
+                .args(Component.text("there")));
 
         String result = PlainTextComponentSerializer.plainText().serialize(translated);
         assertEquals("Hey there!", result);
