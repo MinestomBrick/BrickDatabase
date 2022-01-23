@@ -35,11 +35,22 @@ public class BrickCommand extends Command {
 
     protected void setupCommandGroupDefaults() {
         // default condition check
-        setCondition((sender, commandString) ->
-                getSubcommands().stream()
-                        .map(Command::getCondition)
-                        .filter(Objects::nonNull)
-                        .anyMatch(cc -> cc.canUse(sender, commandString)));
+        setCondition((sender, commandString) -> {
+            boolean result = getSubcommands().stream()
+                    .map(Command::getCondition)
+                    .filter(Objects::nonNull)
+                    .anyMatch(cc -> cc.canUse(sender, null));
+            if ( commandString == null ) {
+                return result;
+            }
+
+            if ( !result ) {
+                CommandCallback cb = MinecraftServer.getCommandManager().getUnknownCommandCallback();
+                if (cb != null) cb.apply(sender, commandString);
+            }
+
+            return result;
+        });
 
         // sub command not found
         setDefaultExecutor((sender, context) -> {
@@ -73,7 +84,8 @@ public class BrickCommand extends Command {
                 .anyMatch(cc -> cc.canUse(sender, null));
     }
 
-    public @NotNull Collection<CommandSyntax> addConditionalSyntax(Consumer<CommandConditionBuilder> consumer, @NotNull CommandExecutor executor, @NotNull Argument<?>... args) {
+    public @NotNull Collection<CommandSyntax> addConditionalSyntax
+            (Consumer<CommandConditionBuilder> consumer, @NotNull CommandExecutor executor, @NotNull Argument<?>... args) {
         CommandConditionBuilder builder = conditionBuilder();
         consumer.accept(builder);
         return super.addConditionalSyntax(builder.build(), executor, args);
