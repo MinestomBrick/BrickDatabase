@@ -10,8 +10,10 @@ import java.util.Locale;
 public interface TranslationManager {
 
     static TranslationManager get() {
-        return SimpleTranslationManager.INSTANCE;
+        return TranslationAPI.get();
     }
+
+    //
 
     Component translate(Locale locale, TranslatableComponent component);
 

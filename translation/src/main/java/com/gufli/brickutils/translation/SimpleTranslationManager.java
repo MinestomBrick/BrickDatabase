@@ -30,8 +30,6 @@ import java.util.stream.Stream;
 
 public class SimpleTranslationManager implements TranslationManager {
 
-    static SimpleTranslationManager INSTANCE;
-
     private final Logger LOGGER = LoggerFactory.getLogger(SimpleTranslationManager.class);
 
     private final TranslationRegistry registry;
@@ -41,7 +39,7 @@ public class SimpleTranslationManager implements TranslationManager {
     private final BrickComponentRenderer renderer;
 
     public SimpleTranslationManager(String namespace, Locale defaultLocale) {
-        INSTANCE = this;
+        TranslationAPI.setTranslationManager(this);
 
         final Key key = Key.key(namespace.toLowerCase() + ":translations");
         this.registry = TranslationRegistry.create(key);
