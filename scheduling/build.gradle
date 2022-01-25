@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'com.github.Minestom:Minestom:-SNAPSHOT'
+
+    implementation 'com.google.guava:guava:17.0'
+}
+
+test {
+    useJUnitPlatform()
+}

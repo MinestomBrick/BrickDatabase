@@ -3,4 +3,5 @@ rootProject.name = 'BrickUtils'
 include 'database'
 include 'translation'
 include 'commands'
+include 'scheduling'
 
